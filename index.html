@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <title>Simple Calculator</title>
+    </head>
+    <body>
+        <h1>Simple Calculator</h1>
+        <div id="parent">
+            <div class="row">
+                <div class="col" id="disVal">0</div>
+            </div>
+            <div class="row">
+                <div class="but col" id="ac">AC</div>
+                <div class="but col" id="back">&#8676;</div>
+                <div class="but oper col" id="divide">&#247;</div>
+            </div>
+            <div class="row">
+                <div class="but num col" id="seven">7</div>
+                <div class="but num col" id="eight">8</div>
+                <div class="but num col" id="nine">9</div>
+                <div class="but oper col" id="mut">x</div>
+            </div>
+            <div class="row">
+                <div class="but num col" id="four">4</div>
+                <div class="but num col" id="five">5</div>
+                <div class="but num col" id="six">6</div>
+                <div class="but oper col" id="minus">-</div>
+            </div>
+            <div class="row">
+                <div class="but num col" id="one">1</div>
+                <div class="but num col" id="two">2</div>
+                <div class="but num col" id="three">3</div>
+                <div class="but oper col" id="plus">+</div>
+            </div>
+            <div class="row">
+                <div class="but num col" id="zero">0</div>
+                <div class="but col" id="dec">.</div>
+                <div class="but oper col" id="equal">=</div>
+            </div>
+        </div>
+        <script>
+            var one = document.getElementById('one');
+            var two = document.getElementById('two');
+            var three = document.getElementById('three');
+            var four = document.getElementById('four');
+            var five = document.getElementById('five');
+            var six = document.getElementById('six');
+            var seven = document.getElementById('seven');
+            var eight = document.getElementById('eight');
+            var nine = document.getElementById('nine');
+            var zero = document.getElementById('zero');
+
+            var dec = document.getElementById('dec');
+            var ac = document.getElementById('ac');
+            var back = document.getElementById('back');
+            var displayValElement = document.getElementById('disVal');
+
+            var num = document.getElementsByClassName('num');
+            var oper = document.getElementsByClassName('oper');
+
+            var displayVal = '0';
+            var pendingVal ;
+            var evalStringArray = [];
+
+            var updateDisplayVal = (clickObj) => {
+                var butText = clickObj.target.innerText;
+
+                if(displayVal === '0'){
+                    displayVal = '';
+                }
+
+                displayVal += butText;
+                displayValElement.innerText = displayVal;
+            }
+            
+            var performOperation = (clickObj) => {
+                var operator = clickObj.target.innerText;
+
+                switch(operator){
+                    case '+':
+                        pendingVal = displayVal;
+                        displayVal = '0';
+                        displayValElement.innerText = displayVal;
+                        evalStringArray.push(pendingVal);
+                        evalStringArray.push('+');
+                        break;
+
+                    case '-':
+                        pendingVal = displayVal;
+                        displayVal = '0';
+                        displayValElement.innerText = displayVal;
+                        evalStringArray.push(pendingVal);
+                        evalStringArray.push('-');
+                        break;
+                    
+                    case 'x':
+                        pendingVal = displayVal;
+                        displayVal = '0';
+                        displayValElement.innerText = displayVal;
+                        evalStringArray.push(pendingVal);
+                        evalStringArray.push('*');
+                        break;
+
+                    case '÷':
+                        pendingVal = displayVal;
+                        displayVal = '0';
+                        displayValElement.innerText = displayVal;
+                        evalStringArray.push(pendingVal);
+                        evalStringArray.push('/');
+                        break;
+
+                    case '=':
+                        evalStringArray.push(displayVal);
+                        var evalRes = eval(evalStringArray.join(' '));
+                        displayVal = evalRes + '';
+                        displayValElement.innerText = displayVal;
+                        evalStringArray = [];
+                        break;
+                    default:
+                        break;
+                    
+                }
+            }
+            for(let i = 0 ; i<num.length ; i++){
+                num[i].addEventListener('click',updateDisplayVal, false);
+            
+            }
+            
+            for(let i = 0 ; i<oper.length ; i++){
+                oper[i].addEventListener('click',performOperation, false);
+            }
+            
+            ac.onclick = () => {
+                displayVal = '0';
+                pendingVal = undefined;
+                evalStringArray = [];
+                displayValElement.innerHTML = displayVal;
+            }
+
+            back.onclick = () => {
+                let lenOfDisVal = displayVal.length;
+                displayVal = displayVal.slice(0,lenOfDisVal - 1);
+                
+                if(displayVal === '') displayVal = '0';
+                
+                displayValElement.innerText = displayVal;
+            }
+
+            dec.onclick = () => {
+                if(!displayVal.includes('.')) displayVal += '.';
+                displayValElement.innerText = displayVal;
+            }
+        </script>
+
+    </body>
+</html>
